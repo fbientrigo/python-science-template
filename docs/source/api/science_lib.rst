@@ -12,6 +12,14 @@ science\_lib.core module
    :show-inheritance:
    :undoc-members:
 
+science\_lib.hello module
+-------------------------
+
+.. automodule:: science_lib.hello
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 Module contents
 ---------------
 

@@ -5,15 +5,23 @@
 
 import os
 import sys
+import tomllib
+from pathlib import Path
+
 sys.path.insert(0, os.path.abspath('../../src'))
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Science Project'
-copyright = '2026, Science Team'
-author = 'Science Team'
-release = '0.1.0'
+# Read from pyproject.toml
+pyproject_path = Path(__file__).parent.parent.parent / 'pyproject.toml'
+with open(pyproject_path, 'rb') as f:
+    pyproject = tomllib.load(f)
+
+project = pyproject.get('tool', {}).get('template', {}).get('project_title', 'Science Project')
+author = pyproject.get('tool', {}).get('template', {}).get('author', 'Science Team')
+release = pyproject.get('project', {}).get('version', '0.1.0')
+copyright = f'2026, {author}'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -33,7 +41,7 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 # -- Napoleon settings -------------------------------------------------------
-napoleon_google_docstring = True
+napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 napoleon_include_init_with_doc = False
 napoleon_include_private_with_doc = False

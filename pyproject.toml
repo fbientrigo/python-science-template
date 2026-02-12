@@ -30,3 +30,8 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+
+[tool.template]
+module_name = "science_lib"
+project_title = "Science Project"
+author = "Science Team"
