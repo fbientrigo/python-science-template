@@ -57,3 +57,90 @@
 - pytest>=8 (not exact version) - allows patch/minor updates
 - sphinx>=7, sphinx-rtd-theme>=2
 - Balances stability with flexibility for security updates
+
+## 2026-02-12 - Task 3: CI Workflow Architecture Decisions
+
+### D5: Mirror-Environment Pattern
+**Decision**: Build CI from `.devcontainer/Dockerfile` instead of using pre-built GitHub Actions
+**Rationale**:
+- Guarantees dev/CI environment parity (same base image, dependencies, Python version)
+- Eliminates "works in my devcontainer but not in CI" issues
+- Single source of truth for environment configuration
+- Aligns with scientific reproducibility principles
+
+### D6: Docker --user Flag
+**Decision**: Run container with `--user "$(id -u):$(id -g)"` instead of default root
+**Rationale**:
+- Prevents pytest from creating cache files owned by root
+- GitHub Actions workspace must be writable by runner user
+- Matches devcontainer behavior (non-root user)
+- Avoids permission errors on subsequent CI runs
+
+### D7: Trigger Branches
+**Decision**: Trigger on main/master/develop (not all branches)
+**Rationale**:
+- Reduces CI minutes for experimental feature branches
+- Developers can still run tests locally in devcontainer
+- Pull requests to these branches will still trigger CI
+- Can be expanded later if needed
+
+### D8: Single Job Architecture
+**Decision**: One job "test" instead of matrix (multi-version, multi-OS)
+**Rationale**:
+- Project uses pinned Python 3.11 in devcontainer
+- Scientific reproducibility requires FIXED environment, not compatibility testing
+- Can add matrix later if cross-version support becomes requirement
+- Keeps CI fast and focused
+
+### D9: Install + Test in Container
+**Decision**: Run `pip install -e '.[dev]'` inside container (not in Dockerfile)
+**Rationale**:
+- Dockerfile is reusable for any project (generic devcontainer)
+- GitHub workspace is mounted at runtime → package install must happen then
+- Mirrors local development workflow (devcontainer auto-installs via postCreateCommand)
+- Keeps Dockerfile clean and project-agnostic
+
+
+## 2026-02-12 - Task 4: Sphinx Documentation Decisions
+
+### D10: Sphinx Theme Selection
+**Decision**: Use `sphinx_rtd_theme` (ReadTheDocs theme)
+**Rationale**:
+- Professional appearance, widely recognized in Python community
+- Mobile-responsive design
+- Built-in search functionality
+- Better navigation for large projects
+- Already installed as dev dependency
+
+### D11: Docstring Format
+**Decision**: Support both Google and NumPy-style docstrings via Napoleon
+**Rationale**:
+- Google style: More readable, common in industry
+- NumPy style: Standard in scientific Python libraries
+- Napoleon extension parses both into reStructuredText
+- Flexibility for contributors with different backgrounds
+
+### D12: Makefile Targets
+**Decision**: Separate `apidoc` and `html` targets instead of combined
+**Rationale**:
+- Allows developers to regenerate API stubs without full rebuild
+- CI can run both targets sequentially for validation
+- `apidoc` can be run before committing to ensure stubs are updated
+- More granular control over documentation workflow
+
+### D13: ARCHITECTURE.md Location
+**Decision**: Place in `docs/` directory, not project root
+**Rationale**:
+- Groups all documentation in one location
+- Keeps project root clean
+- Can be symlinked or referenced from README if needed
+- Follows convention of many scientific Python projects
+
+### D14: sys.path Configuration
+**Decision**: Add `../../src` to sys.path in conf.py instead of installing package
+**Rationale**:
+- Sphinx autodoc needs to import modules to extract docstrings
+- Adding to sys.path allows autodoc to find `science_lib` package
+- Works in CI without separate pip install step
+- Simpler for read-the-docs integration later
+

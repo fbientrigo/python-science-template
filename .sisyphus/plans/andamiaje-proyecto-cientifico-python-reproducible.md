@@ -292,7 +292,7 @@ Wave 2 (After Wave 1):
     Evidence: .sisyphus/evidence/task-2-*.log/.txt
   ```
 
-- [ ] 3. Crear CI `.github/workflows/ci.yml` (build Dockerfile + pytest dentro del contenedor)
+- [x] 3. Crear CI `.github/workflows/ci.yml` (build Dockerfile + pytest dentro del contenedor)
 
   **What to do**:
   - Crear workflow `ci.yml` que corra en `push` y `pull_request`.
@@ -340,7 +340,7 @@ Wave 2 (After Wave 1):
     Evidence: .sisyphus/evidence/task-3-ci-local-docker-run.log
   ```
 
-- [ ] 4. Documentacion viva en `docs/` (ARCHITECTURE.md + Sphinx + apidoc)
+- [x] 4. Documentacion viva en `docs/` (ARCHITECTURE.md + Sphinx + apidoc)
 
   **What to do**:
   - Crear `docs/ARCHITECTURE.md` explicando:

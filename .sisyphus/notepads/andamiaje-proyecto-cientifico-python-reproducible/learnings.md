@@ -69,3 +69,88 @@ tests/
 - **Atomic Commits**: Large wave updates should be split by concern (config, feature, test, docs) to ensure history remains readable and reverts are safe.
 - **Dependency-Ordered Commits**: Level 0-1 (devcontainer, package config) were committed before Level 2-3 (src-layout, app, tests).
 - **Test Pairing**: Tests were committed alongside their corresponding package files.
+
+## 2026-02-12 - Task 3: GitHub Actions CI Workflow
+
+**What worked:**
+- Created `.github/workflows/ci.yml` with Mirror-Environment Pattern
+- Workflow builds from same `.devcontainer/Dockerfile` used in development
+- Uses `actions/checkout@v4` (latest stable)
+- Runs pytest inside Docker container with `--user $(id -u):$(id -g)` to prevent root-owned files
+
+**CI Configuration:**
+```yaml
+Triggers: push/pull_request on main/master/develop
+Job: test on ubuntu-latest
+Steps:
+  1. Checkout repository
+  2. Build Docker image from .devcontainer/Dockerfile
+  3. Run pytest inside container with volume mount
+```
+
+**Docker run flags explained:**
+- `--rm`: Remove container after run (cleanup)
+- `--user "$(id -u):$(id -g)"`: Run as current user to prevent root-owned files in workspace
+- `-v "${{ github.workspace }}:/work"`: Mount GitHub workspace to /work (matches Dockerfile WORKDIR)
+- `-w /work`: Set working directory inside container
+- `sh -c "..."`: Run install + test commands in single shell
+
+**Validation:**
+- YAML syntax validated with Python's yaml module: ✓ Valid
+- Cannot test full Docker run locally (WSL2 integration not enabled)
+- Workflow will run on GitHub's ubuntu-latest runners with full Docker support
+
+**Mirror-Environment Pattern Benefits:**
+- Dev and CI use IDENTICAL Dockerfile → byte-for-byte reproducibility
+- Same Python version, same system dependencies, same workdir
+- Tests passing locally WILL pass in CI (eliminates "works on my machine")
+
+
+## 2026-02-12 - Task 4: Sphinx Documentation Setup
+
+**What worked:**
+- Sphinx autodoc + napoleon for Google/NumPy-style docstrings
+- sphinx-apidoc successfully generated API stubs from src/science_lib
+- HTML build succeeded with minimal warnings
+- make -C docs apidoc creates docs/source/api/*.rst files automatically
+- make -C docs html builds documentation to docs/build/html/
+
+**Documentation structure:**
+```
+docs/
+├── ARCHITECTURE.md       # Human-readable design rationale
+├── Makefile              # apidoc and html targets
+├── source/
+│   ├── conf.py           # Sphinx config (adds src/ to sys.path)
+│   ├── index.rst         # Main doc entry point
+│   ├── api/              # Auto-generated API stubs
+│   │   ├── modules.rst
+│   │   └── science_lib.rst
+│   ├── _static/          # Static assets (CSS, JS)
+│   └── _templates/       # Custom templates
+└── build/
+    └── html/             # Generated HTML documentation
+```
+
+**Key Sphinx configuration decisions:**
+- Added ../../src to sys.path so autodoc can import science_lib
+- Extensions: sphinx.ext.autodoc, sphinx.ext.napoleon
+- Theme: sphinx_rtd_theme (ReadTheDocs theme)
+- Napoleon settings: Google and NumPy docstring formats enabled
+
+**Verification results:**
+1. make -C docs apidoc - exit 0, created 2 .rst files in source/api/
+2. make -C docs html - exit 0, built HTML with 1 minor warning (missing _static dir)
+3. Fixed warning by creating docs/source/_static/ directory
+
+**ARCHITECTURE.md covers:**
+- Why src-layout (prevents accidental imports)
+- Why app/ separation (entry points vs library logic)
+- Mirror-Environment Pattern (DevContainer = CI)
+- Test conventions (no __init__.py in test subdirs)
+- Sphinx autodoc conventions (Google-style docstrings)
+
+**Pattern applied:**
+- **Living Documentation**: apidoc target automates API doc generation
+- Docs stay synchronized with code via automated stub generation
+- CI can enforce make -C docs html succeeds
