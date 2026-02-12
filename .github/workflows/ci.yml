@@ -13,15 +13,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
-      - name: Build Docker image from devcontainer
-        run: docker build -f .devcontainer/Dockerfile -t science-ci .
-      
-      - name: Run pytest inside container
+
+      - name: Verify (Docker build + pytest + app/main.py)
+        run: make docker-verify
+
+      - name: Check for workspace changes
         run: |
-          docker run --rm \
-            --user "$(id -u):$(id -g)" \
-            -v "${{ github.workspace }}:/work" \
-            -w /work \
-            science-ci \
-            sh -c "python -m pip install -e '.[dev]' && pytest -q"
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Error: Workspace modified by verification. Run 'make docker-verify' locally and commit the changes."
+            git status --porcelain
+            exit 1
+          fi

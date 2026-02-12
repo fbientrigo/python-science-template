@@ -10,10 +10,15 @@ requires-python = ">=3.11"
 dependencies = []
 
 [project.optional-dependencies]
-dev = [
-  "pytest>=8",
+test = [
+  "pytest>=8"
+]
+docs = [
   "sphinx>=7",
   "sphinx-rtd-theme>=2"
+]
+dev = [
+  "science-project[test,docs]"
 ]
 
 [tool.setuptools]

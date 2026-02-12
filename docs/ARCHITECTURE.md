@@ -126,7 +126,7 @@ tests/
    ```
    Not via relative imports or sys.path hacks.
 
-4. **Run tests against installed package**: Always run `pip install -e ".[dev]"` before `pytest`. This ensures you're testing the distribution, not local files.
+4. **Run tests against installed package**: Always run `pip install -e ".[test]"` before `pytest`. This ensures you're testing the distribution, not local files.
 
 ### Example Test
 

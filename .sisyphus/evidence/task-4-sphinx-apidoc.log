@@ -1,3 +1,0 @@
-make: Entering directory '/mnt/c/Users/Asus/Documents/code/plantilla_cientifica/docs'
-sphinx-apidoc -f -o source/api ../src/science_lib
-make: Leaving directory '/mnt/c/Users/Asus/Documents/code/plantilla_cientifica/docs'
