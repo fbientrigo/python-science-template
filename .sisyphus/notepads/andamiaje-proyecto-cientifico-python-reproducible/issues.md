@@ -24,3 +24,11 @@ Docker build verification could not be executed in WSL2 environment:
 ### Recommendation
 User should verify by opening project in VS Code DevContainer or enabling Docker Desktop WSL integration.
 
+
+## 2026-02-12 - Git Commit Challenges
+
+### Issues
+1. **Ignored Evidence Files**: Verification logs (`.log`) are ignored by the standard Python `.gitignore`.
+   - **Resolution**: Forced staging using `git add -f` as they are critical for scientific verification audit.
+2. **Missing Git Identity**: The environment lacked a global git user/email configuration.
+   - **Resolution**: Used `git -c user.name="Sisyphus" -c user.email="clio-agent@sisyphuslabs.ai"` to execute commits without modifying global config.

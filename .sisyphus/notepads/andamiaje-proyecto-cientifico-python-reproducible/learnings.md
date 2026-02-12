@@ -62,3 +62,10 @@ tests/
 - sphinx 7+ (already present)
 - sphinx-rtd-theme 3.1.0
 - pluggy 1.6.0 (upgraded from 1.0.0)
+
+## 2026-02-12 - Git Commit of Wave 1 Tasks
+
+### Patterns Applied
+- **Atomic Commits**: Large wave updates should be split by concern (config, feature, test, docs) to ensure history remains readable and reverts are safe.
+- **Dependency-Ordered Commits**: Level 0-1 (devcontainer, package config) were committed before Level 2-3 (src-layout, app, tests).
+- **Test Pairing**: Tests were committed alongside their corresponding package files.
