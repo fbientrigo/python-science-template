@@ -11,5 +11,14 @@ RUN apt-get update \
 # Upgrade pip tooling
 RUN python -m pip install --upgrade pip setuptools wheel
 
+# Create non-root user with fixed home directory
+RUN groupadd -r app && useradd -r -g app -d /home/app -m app
+
+# Set environment for the user
+ENV HOME=/home/app
+
 # Devcontainers typically mount the repo; keep workdir generic
 WORKDIR /work
+
+# Switch to non-root user
+USER app

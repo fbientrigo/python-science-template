@@ -5,6 +5,7 @@ IMAGE_TAG ?= science-template:verify
 docker-build:
 	docker build -f .devcontainer/Dockerfile -t $(IMAGE_TAG) .
 
+# Env guardrails: HOME=/tmp and PYTHONNOUSERSITE=1 prevent pip user-site writes (e.g. /.local)
 docker-verify: docker-build
 	mkdir -p .sisyphus/evidence
 	docker run --rm \
@@ -13,6 +14,8 @@ docker-verify: docker-build
 	  -e PYTHONDONTWRITEBYTECODE=1 \
 	  -e XDG_CACHE_HOME=/tmp/.cache \
 	  -e PIP_CACHE_DIR=/tmp/pip-cache \
+	  -e HOME=/tmp \
+	  -e PYTHONNOUSERSITE=1 \
 	  $(IMAGE_TAG) \
 	  sh -lc 'cp -a /work /tmp/work \
 	    && cd /tmp/work \
@@ -33,6 +36,8 @@ docker-verify-rw: docker-build
 	  -e PYTHONDONTWRITEBYTECODE=1 \
 	  -e XDG_CACHE_HOME=/tmp/.cache \
 	  -e PIP_CACHE_DIR=/tmp/pip-cache \
+	  -e HOME=/tmp \
+	  -e PYTHONNOUSERSITE=1 \
 	  $(IMAGE_TAG) \
 	  sh -lc 'python -m venv /tmp/venv \
 	    && /tmp/venv/bin/pip install -U pip \
