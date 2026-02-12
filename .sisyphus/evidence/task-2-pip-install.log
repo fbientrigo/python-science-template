@@ -1,0 +1,61 @@
+Obtaining file:///mnt/c/Users/Asus/Documents/code/plantilla_cientifica
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Collecting pytest>=8 (from science-project==0.1.0)
+  Using cached pytest-9.0.2-py3-none-any.whl.metadata (7.6 kB)
+Requirement already satisfied: sphinx>=7 in /home/fabi/anaconda3/lib/python3.12/site-packages (from science-project==0.1.0) (9.1.0)
+Collecting sphinx-rtd-theme>=2 (from science-project==0.1.0)
+  Downloading sphinx_rtd_theme-3.1.0-py2.py3-none-any.whl.metadata (4.5 kB)
+Requirement already satisfied: iniconfig>=1.0.1 in /home/fabi/anaconda3/lib/python3.12/site-packages (from pytest>=8->science-project==0.1.0) (1.1.1)
+Requirement already satisfied: packaging>=22 in /home/fabi/anaconda3/lib/python3.12/site-packages (from pytest>=8->science-project==0.1.0) (24.1)
+Collecting pluggy<2,>=1.5 (from pytest>=8->science-project==0.1.0)
+  Using cached pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+Requirement already satisfied: pygments>=2.7.2 in /home/fabi/anaconda3/lib/python3.12/site-packages (from pytest>=8->science-project==0.1.0) (2.19.2)
+Requirement already satisfied: sphinxcontrib-applehelp>=1.0.7 in /home/fabi/anaconda3/lib/python3.12/site-packages (from sphinx>=7->science-project==0.1.0) (2.0.0)
+Requirement already satisfied: sphinxcontrib-devhelp>=1.0.6 in /home/fabi/anaconda3/lib/python3.12/site-packages (from sphinx>=7->science-project==0.1.0) (2.0.0)
+Requirement already satisfied: sphinxcontrib-htmlhelp>=2.0.6 in /home/fabi/anaconda3/lib/python3.12/site-packages (from sphinx>=7->science-project==0.1.0) (2.1.0)
+Requirement already satisfied: sphinxcontrib-jsmath>=1.0.1 in /home/fabi/anaconda3/lib/python3.12/site-packages (from sphinx>=7->science-project==0.1.0) (1.0.1)
+Requirement already satisfied: sphinxcontrib-qthelp>=1.0.6 in /home/fabi/anaconda3/lib/python3.12/site-packages (from sphinx>=7->science-project==0.1.0) (2.0.0)
+Requirement already satisfied: sphinxcontrib-serializinghtml>=1.1.9 in /home/fabi/anaconda3/lib/python3.12/site-packages (from sphinx>=7->science-project==0.1.0) (1.1.10)
+Requirement already satisfied: Jinja2>=3.1 in /home/fabi/anaconda3/lib/python3.12/site-packages (from sphinx>=7->science-project==0.1.0) (3.1.4)
+Requirement already satisfied: docutils<0.23,>=0.21 in /home/fabi/anaconda3/lib/python3.12/site-packages (from sphinx>=7->science-project==0.1.0) (0.21.2)
+Requirement already satisfied: snowballstemmer>=2.2 in /home/fabi/anaconda3/lib/python3.12/site-packages (from sphinx>=7->science-project==0.1.0) (2.2.0)
+Requirement already satisfied: babel>=2.13 in /home/fabi/anaconda3/lib/python3.12/site-packages (from sphinx>=7->science-project==0.1.0) (2.18.0)
+Requirement already satisfied: alabaster>=0.7.14 in /home/fabi/anaconda3/lib/python3.12/site-packages (from sphinx>=7->science-project==0.1.0) (0.7.16)
+Requirement already satisfied: imagesize>=1.3 in /home/fabi/anaconda3/lib/python3.12/site-packages (from sphinx>=7->science-project==0.1.0) (1.4.1)
+Requirement already satisfied: requests>=2.30.0 in /home/fabi/anaconda3/lib/python3.12/site-packages (from sphinx>=7->science-project==0.1.0) (2.32.3)
+Requirement already satisfied: roman-numerals>=1.0.0 in /home/fabi/anaconda3/lib/python3.12/site-packages (from sphinx>=7->science-project==0.1.0) (4.1.0)
+Collecting sphinxcontrib-jquery<5,>=4 (from sphinx-rtd-theme>=2->science-project==0.1.0)
+  Downloading sphinxcontrib_jquery-4.1-py2.py3-none-any.whl.metadata (2.6 kB)
+Requirement already satisfied: MarkupSafe>=2.0 in /home/fabi/anaconda3/lib/python3.12/site-packages (from Jinja2>=3.1->sphinx>=7->science-project==0.1.0) (2.1.3)
+Requirement already satisfied: charset-normalizer<4,>=2 in /home/fabi/anaconda3/lib/python3.12/site-packages (from requests>=2.30.0->sphinx>=7->science-project==0.1.0) (3.3.2)
+Requirement already satisfied: idna<4,>=2.5 in /home/fabi/anaconda3/lib/python3.12/site-packages (from requests>=2.30.0->sphinx>=7->science-project==0.1.0) (3.7)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /home/fabi/anaconda3/lib/python3.12/site-packages (from requests>=2.30.0->sphinx>=7->science-project==0.1.0) (2.2.3)
+Requirement already satisfied: certifi>=2017.4.17 in /home/fabi/anaconda3/lib/python3.12/site-packages (from requests>=2.30.0->sphinx>=7->science-project==0.1.0) (2024.8.30)
+Using cached pytest-9.0.2-py3-none-any.whl (374 kB)
+Downloading sphinx_rtd_theme-3.1.0-py2.py3-none-any.whl (7.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.7/7.7 MB 1.2 MB/s eta 0:00:00
+Using cached pluggy-1.6.0-py3-none-any.whl (20 kB)
+Downloading sphinxcontrib_jquery-4.1-py2.py3-none-any.whl (121 kB)
+Building wheels for collected packages: science-project
+  Building editable for science-project (pyproject.toml): started
+  Building editable for science-project (pyproject.toml): finished with status 'done'
+  Created wheel for science-project: filename=science_project-0.1.0-0.editable-py3-none-any.whl size=2293 sha256=257a6a17974631af39dbbf0f3f329a5a1b65f7cacd1145ed321ec547bb4458cd
+  Stored in directory: /tmp/pip-ephem-wheel-cache-8k9a6uzz/wheels/7f/81/73/5ab5f79f7c96478fb84ddae071efb1593d5f72a806e4b6f573
+Successfully built science-project
+Installing collected packages: science-project, pluggy, pytest, sphinxcontrib-jquery, sphinx-rtd-theme
+  Attempting uninstall: pluggy
+    Found existing installation: pluggy 1.0.0
+    Uninstalling pluggy-1.0.0:
+      Successfully uninstalled pluggy-1.0.0
+  Attempting uninstall: pytest
+    Found existing installation: pytest 7.4.4
+    Uninstalling pytest-7.4.4:
+      Successfully uninstalled pytest-7.4.4
+Successfully installed pluggy-1.6.0 pytest-9.0.2 science-project-0.1.0 sphinx-rtd-theme-3.1.0 sphinxcontrib-jquery-4.1
