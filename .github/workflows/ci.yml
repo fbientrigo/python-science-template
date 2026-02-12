@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Build Docker image from devcontainer
+        run: docker build -f .devcontainer/Dockerfile -t science-ci .
+      
+      - name: Run pytest inside container
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -v "${{ github.workspace }}:/work" \
+            -w /work \
+            science-ci \
+            sh -c "python -m pip install -e '.[dev]' && pytest -q"
