@@ -1,6 +1,9 @@
+import runpy
 from pathlib import Path
 
-from scripts.init_project import module_name_from_project, profile_spec
+INITIALIZER = runpy.run_path("scripts/init_project.py")
+module_name_from_project = INITIALIZER["module_name_from_project"]
+profile_spec = INITIALIZER["profile_spec"]
 
 
 def test_module_name_from_project() -> None:
@@ -18,4 +21,4 @@ def test_profiles_are_small_and_explicit() -> None:
 def test_template_metadata_exists() -> None:
     text = Path("pyproject.toml").read_text(encoding="utf-8")
     assert "[tool.science-template]" in text
-    assert 'initialized = false' in text
+    assert "initialized = false" in text
