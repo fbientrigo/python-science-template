@@ -1,74 +1,99 @@
-# python-science-template
+# Scientific Python Template
 
-This project follows the Mirror-Environment Pattern: your development environment (DevContainer) matches your testing environment (GitHub Actions) by running verification inside the same Docker image.
+A small project template for researchers who want **one reproducible verification path** instead of separate local and CI environments.
 
-## Quickstart (Docker verification)
+The same Dockerfile powers the Dev Container and `make verify`; GitHub Actions runs that same command. Verification mounts your checkout read-only, copies it into an ephemeral container workspace, then installs, lints, tests, builds docs, and runs a smoke entry point.
 
-The project uses a **Clean Verification Flow** to ensure reproducibility and avoid polluting the host workspace with root-owned artifacts (like `__pycache__` or `.pytest_cache`).
+## 30-second start
 
-### 1. Build the image
-
-```bash
-make docker-build
-```
-
-### 2. Run verification
-
-The standard verification target mounts your source code as **read-only** and performs the installation and testing inside a temporary directory in the container:
+1. Click **Use this template** on GitHub and clone the new repository.
+2. Initialize it:
 
 ```bash
-make docker-verify
+python scripts/init_project.py
 ```
 
-This command:
-- Mounts the current directory as `:ro`.
-- Copies the source to `/tmp/work` to avoid permission issues during installation.
-- Creates a virtual environment in `/tmp/venv`.
-- Installs the package with `[test]` extras.
-- Runs tests and the entrypoint.
-
-### Dependency Extras
-- `pip install '.[test]'`: Minimal dependencies for running tests (used in CI).
-- `pip install '.[dev]'`: Full development environment, including documentation tools (Sphinx) and testing utilities.
-
-## Design Rationale: Permission & CI Hardening
-
-This template is designed to be "CI-native" by avoiding common pitfalls with Docker permissions and volume mounts.
-
-### Why we avoid `docker run --user $(id -u):$(id -g)`
-While mapping the host UID/GID to the container is a common local development pattern, we avoid it in CI for several reasons:
-1.  **Identity Mismatch**: In environments like GitHub Actions, the runner UID (typically 1001) may not exist in the container's `/etc/passwd`, leading to "I have no name!" errors and broken tool behavior.
-2.  **Home Directory Access**: Many tools (pip, git, etc.) expect a valid `$HOME`. If you force a UID that doesn't have a home directory defined in the image, these tools may fail or try to write to `/`, which is restricted.
-3.  **Portability**: The template should work regardless of the host's UID. By running as the container's internal user (`app`) and isolating all write operations to `/tmp`, we ensure consistent behavior across local and CI environments.
-
-### Hardening with `HOME=/tmp` and `PYTHONNOUSERSITE=1`
-To make the container execution truly ephemeral and secure:
--   **`HOME=/tmp`**: We override the home directory to `/tmp`. Since `/tmp` is world-writable, this guarantees that any tool attempting to write configuration or cache to `~` will succeed without needing complex volume permission management.
--   **`PYTHONNOUSERSITE=1`**: This prevents Python from loading packages from the user-specific site-packages directory (usually `~/.local`). This ensures that the environment is strictly defined by the virtual environment created during verification, preventing "poisoning" from the container's global state.
-
-### Debugging non-root containers
-If you need to use a different non-root user or if you encounter permission issues:
-1.  Use `make docker-verify-rw` to run with a read-write mount and inspect the artifacts.
-2.  Verify that your container user has write access to `/tmp`.
-3.  Check if your source code contains pre-existing `*.egg-info` or `__pycache__` directories owned by `root`, which might interfere with the `cp -a` command or tool execution.
-
-## Troubleshooting
-
-### Persistence of root-owned files
-If you previously ran commands that created files inside the container with a read-write mount, they might be owned by `root` on your host. Use this to clean them:
+3. Verify exactly what CI will verify:
 
 ```bash
-make clean
+make verify
 ```
 
-### Failures in Read-Only mode
-Some legacy Python packaging tools might try to write to the source directory even during installation (e.g., updating `src/*.egg-info`). 
-
-If `make docker-verify` fails due to read-only restrictions, you can use the debug target which uses a read-write mount:
+For non-interactive setup:
 
 ```bash
-make docker-verify-rw
+python scripts/init_project.py \
+  --name my-analysis \
+  --description "Muon-background analysis" \
+  --author "Your Name" \
+  --profile eda
 ```
-*Note: This may create root-owned artifacts in your workspace.*
 
-CI runs the same `make docker-verify` step.
+### Project profiles
+
+The initializer asks one practical question: **what kind of scientific project is this?** It then adds only a minimal proof-of-life harness.
+
+| Profile | Adds | Proof of life |
+| --- | --- | --- |
+| `generic` | standard library only | summarize a numeric sample |
+| `eda` | pandas | summarize numeric columns in a DataFrame |
+| `ml` | scikit-learn | fit and predict with a deterministic baseline |
+| `api` | FastAPI + Uvicorn | create an app with `/health` |
+
+These are starting harnesses, not frameworks. Delete or replace them once your real project has equivalent coverage.
+
+<!-- TEMPLATE-ONLY:START -->
+## Why this template exists
+
+Scientific projects often drift into three subtly different environments: a laptop, a container, and CI. This template deliberately rejects that split.
+
+```text
+source checkout (read-only)
+          │
+          ▼
+.devcontainer/Dockerfile
+          │
+    ┌─────┴─────┐
+    ▼           ▼
+Dev Container   make verify / GitHub Actions
+                │
+                ▼
+        ephemeral /tmp/work
+                │
+          uv sync --frozen
+                │
+       lint + tests + docs + smoke
+```
+
+The initializer creates a `uv.lock` for the selected profile when `uv` can reach the package index. The template itself stays profile-neutral.
+<!-- TEMPLATE-ONLY:END -->
+
+## Fast local iteration
+
+If you do not need the full container gate on every edit:
+
+```bash
+uv sync --group dev --group docs --frozen
+make local-verify
+```
+
+`make local-verify` runs the same lint/test/docs/smoke checks in your current environment. `make verify` remains the canonical gate.
+
+## What is intentionally not included
+
+No notebook framework, experiment tracker, cloud stack, database, LLM integration, or deployment platform is selected for you. Add those only when the project actually needs them.
+
+## Reproducibility contract
+
+- `scripts/init_project.py` creates `uv.lock` after profile selection; when present, every verification uses it with `--frozen`.
+- `.devcontainer/Dockerfile` defines the OS/Python toolchain used by development and verification.
+- Before initialization, or if a lockfile is intentionally absent, the commands emit a warning and resolve from `pyproject.toml` instead of pretending the environment is frozen.
+- `make verify` mounts the repository read-only and performs writes only in an ephemeral copy.
+- CI calls `make verify`; it does not reimplement installation or testing separately.
+- `make local-verify` is a convenience path, not the canonical reproducibility proof.
+
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the design rationale.
+
+## License
+
+MIT.
