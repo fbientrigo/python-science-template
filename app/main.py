@@ -1,6 +1,6 @@
-from science_lib import add, hello_world
+import json
+
+from science_project import summarize
 
 if __name__ == "__main__":
-    print(hello_world())
-    result = add(2, 3)
-    print(f"Result: {result}")
+    print(json.dumps(summarize([1.0, 2.0, 3.0]), sort_keys=True))

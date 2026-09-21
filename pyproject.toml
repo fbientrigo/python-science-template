@@ -1,24 +1,26 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=75", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "science-project"
 version = "0.1.0"
-description = "Reproducible scientific Python scaffold"
+description = "Reproducible scientific Python project"
+readme = "README.md"
 requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Science Team" }]
 dependencies = []
 
-[project.optional-dependencies]
-test = [
-  "pytest>=8"
+[dependency-groups]
+dev = [
+  "pytest>=8.3",
+  "ruff>=0.9",
 ]
 docs = [
-  "sphinx>=7",
-  "sphinx-rtd-theme>=2"
-]
-dev = [
-  "science-project[test,docs]"
+  "sphinx>=8",
+  "sphinx-rtd-theme>=3",
 ]
 
 [tool.setuptools]
@@ -31,7 +33,17 @@ where = ["src"]
 testpaths = ["tests"]
 addopts = "-q"
 
-[tool.template]
-module_name = "science_lib"
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.science-template]
+module_name = "science_project"
 project_title = "Science Project"
-author = "Science Team"
+profile = "generic"
+scaffold_version = "0.2.0"
+initialized = false
