@@ -1,20 +1,10 @@
-# Python bytecode / caches
+.git/
+.venv/
 __pycache__/
 *.py[cod]
-
-# Test caches
 .pytest_cache/
-
-# Packaging artifacts
+.ruff_cache/
 *.egg-info/
 build/
 dist/
-
-# Docs build output
 docs/build/
-
-# VCS
-.git/
-
-# Local automation state
-.sisyphus/

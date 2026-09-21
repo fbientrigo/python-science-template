@@ -4,12 +4,12 @@
     "dockerfile": "Dockerfile",
     "context": ".."
   },
+  "postCreateCommand": "if [ -f uv.lock ]; then uv sync --group dev --group docs --frozen; else uv sync --group dev --group docs; fi",
   "customizations": {
     "vscode": {
       "extensions": [
         "ms-python.python",
         "ms-python.vscode-pylance",
-        "ms-python.black-formatter",
         "charliermarsh.ruff",
         "ms-toolsai.jupyter"
       ]

@@ -1,24 +1,17 @@
 FROM python:3.11-slim
 
-# Basic OS deps
+ARG UV_VERSION=0.10.0
+
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-         git \
-         make \
-         build-essential \
+    && apt-get install -y --no-install-recommends git make build-essential \
+    && python -m pip install --no-cache-dir "uv==${UV_VERSION}" \
     && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip tooling
-RUN python -m pip install --upgrade pip setuptools wheel
-
-# Create non-root user with fixed home directory
 RUN groupadd -r app && useradd -r -g app -d /home/app -m app
 
-# Set environment for the user
-ENV HOME=/home/app
+ENV HOME=/home/app \
+    PYTHONNOUSERSITE=1 \
+    UV_LINK_MODE=copy
 
-# Devcontainers typically mount the repo; keep workdir generic
 WORKDIR /work
-
-# Switch to non-root user
 USER app
