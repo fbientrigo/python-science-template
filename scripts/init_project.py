@@ -8,14 +8,14 @@ uv lockfile when uv is available.
 from __future__ import annotations
 
 import argparse
-from dataclasses import dataclass
 import json
-from pathlib import Path
 import re
 import shutil
 import subprocess
 import sys
 import unicodedata
+from dataclasses import dataclass
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_MODULE = "science_project"
